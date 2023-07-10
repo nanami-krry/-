@@ -8,10 +8,11 @@ export function login(data) {
     data
   })
 }
-
-export function getInfo(token) {
+// 封装一个用户资料接收的接口
+export function getUserInfo() {
   return request({
-
+    url: '/sys/profile',
+    method: 'post'
   })
 }
 
