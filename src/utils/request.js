@@ -1,6 +1,10 @@
 import axios from 'axios'
 import store from '@/store'
+import router from '@/router'
 import { Message } from 'element-ui'
+import { getTimeStamp } from '@/utils/auth'
+
+const TimeOut = 3600 // 定义时间
 const service = axios.create({
   baseURL: process.env.VUE_APP_BASE_API, // 设置axios请求的基础的基础地址
   timeout: 5000 // 定义5秒超时
@@ -9,6 +13,13 @@ const service = axios.create({
 service.interceptors.request.use(config => {
   // 在这个位置需要统一的去注入token
   if (store.getters.token) {
+    // 检查时间戳是否超时，超时就执行以下函数
+    if (IsCheckTimeOut()) {
+      // 调用logout的action，去删除token，用户信息
+      store.dispatch('user/logout')
+      router.push('/login')
+      return Promise.reject(new Error('用户连接超时'))
+    }
     // 如果token存在 注入token
     config.headers['Authorization'] = `Bearer ${store.getters.token}`
   }
@@ -29,7 +40,20 @@ service.interceptors.response.use(response => {
     return Promise.reject(new Error(message))
   }
 }, error => {
-  Message.error(error.message) // 提示错误信息
-  return Promise.reject(error) // 返回执行错误 让当前的执行链跳出成功 直接进入 catch
-})
+  if (error.response && error.response.data && error.response.data.code === 10002) {
+    // 当等于10002的时候 表示 后端告诉我token超时了
+    store.dispatch('user/logout') // 登出action 删除token
+    router.push('/login')
+  } else {
+    Message.error(error.message) // 提示错误信息
+  }
+  return Promise.reject(error)
+}
+)
+// 检查是否超时函数
+function IsCheckTimeOut() {
+  var currentTime = Date.now()
+  var timeStamp = getTimeStamp()
+  return (currentTime - timeStamp) / 1000 > TimeOut
+}
 export default service
