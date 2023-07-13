@@ -128,6 +128,8 @@ export default {
       })
     },
     btnCancel() {
+      this.$emit('update:showDialog', false) // 关闭
+      this.$refs.deptForm.resetFields() // 重置校验字段
       // 重置数据  因为resetFields 只能重置 表单上的数据 非表单上的 比如 编辑中id 不能重置
       this.formData = {
         name: '',
@@ -135,8 +137,6 @@ export default {
         manager: '',
         introduce: ''
       }
-      this.$refs.deptForm.resetFields() // 重置校验字段
-      this.$emit('update:showDialog', false) // 关闭
     }
   }
 }
