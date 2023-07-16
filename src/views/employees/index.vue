@@ -14,6 +14,13 @@
         <el-table border :data="list">
           <el-table-column label="序号" sortable="" type="index" align="center" />
           <el-table-column prop="username" label="姓名" sortable="" />
+          <el-table-column label="头像" width="120px" align="center">
+            <template slot-scope="{row}">
+              <div>
+                <img v-imagerror="require('@/assets/common/bigUserHeader.png')" :src="row.staffPhoto" alt="" style="border-radius: 50%; width: 100px; height: 100px; padding: 10px">
+              </div>
+            </template>
+          </el-table-column>
           <el-table-column prop="mobile" label="手机号" sortable="" />
           <el-table-column prop="workNumber" label="工号" sortable="" />
           <el-table-column :formatter="formatEmployment" prop="formOfEmployment" label="聘用形式" sortable="" />
