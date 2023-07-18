@@ -28,11 +28,12 @@ export default {
   components: { SidebarItem, Logo },
   computed: {
     ...mapGetters([
-      'sidebar'
+      'sidebar', 'routes'
     ]),
-    routes() {
-      return this.$router.options.routes
-    },
+    // 获取当前路由的路由表 addRoutes不会响应式的变化，意思是说这里我们看不到我们的动态路由
+    // routes() {
+    //   return this.$router.options.routes
+    // },
     activeMenu() {
       const route = this.$route
       const { meta, path } = route

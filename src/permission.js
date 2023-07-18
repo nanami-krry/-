@@ -17,9 +17,16 @@ router.beforeEach(async function(to, from, next) {
       next('/') // 跳到主页
     } else {
       if (!store.getters.userId) {
-        await store.dispatch('user/getUserInfo')
+        const { roles } = await store.dispatch('user/getUserInfo')
+        // 筛选用户的可用路由——动态路由
+        const routes = await store.dispatch('permission/filterRoutes', roles.menus)
+        // routes就是筛选的到的动态路由
+        // 把动态路由添加到路由表中
+        router.addRoutes([...routes, { path: '*', redirect: '/404', hidden: true }]) // 把动态路由添加到路由表中
+        next(to.path) // 相当于跳到对应的地址  相当于多做一次跳转 为什么要多做一次跳转
+      } else {
+        next() // 直接放行
       }
-      next() // 直接放行
     }
   } else {
     // 如果没有token

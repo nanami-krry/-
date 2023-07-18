@@ -13,6 +13,7 @@ import store from './store'
 import router from './router'
 import Components from '@/components'
 import * as filters from '@/filters'
+import CheckPermission from '@/mixin/checkPermission'
 
 import '@/icons' // icon
 import '@/permission' // permission control
@@ -33,6 +34,7 @@ Object.keys(filters).forEach(key => {
   Vue.filter(key, filters[key])
 })
 
+Vue.mixin(CheckPermission) // 全局混入检查的方法
 Vue.config.productionTip = false
 
 new Vue({

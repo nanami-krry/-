@@ -7,7 +7,7 @@ import employeesRouter from './modules/employees'
 import permissionRouter from './modules/permission'
 import attendancesRouter from './modules/attendances'
 import salarysRouter from './modules/salarys'
-import settingRouter from './modules/setting'
+import settingRouter from './modules/settings'
 import socialRouter from './modules/social'
 Vue.use(Router)
 
@@ -81,16 +81,16 @@ export const constantRoutes = [
       path: '', // 二级路由path什么都不写 表示二级默认路由
       component: () => import('@/views/import')
     }]
-  },
+  }
 
   // 404 page must be placed at the end !!!
-  { path: '*', redirect: '/404', hidden: true }
+
 ]
 
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: [...constantRoutes, ...asyncRoutes]
+  routes: [...constantRoutes]
 })
 
 const router = createRouter() // 实例化一个路由
